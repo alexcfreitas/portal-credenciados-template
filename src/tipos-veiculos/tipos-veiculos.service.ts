@@ -4,6 +4,8 @@ import { Dominio } from '../model/dominio.entity';
 import { Repository } from 'typeorm';
 import { BuscarTiposVeiculosDTO } from './dto/buscar-tipos-veiculos.dto';
 
+const CLASSE_TIPO_VEICULO = 121;
+
 @Injectable()
 export class TiposVeiculosService {
   constructor(
@@ -12,7 +14,7 @@ export class TiposVeiculosService {
 
   public async getAll(): Promise<BuscarTiposVeiculosDTO[]> {
     return await this.repo
-      .find()
+      .find({ where: { codigoClasse: CLASSE_TIPO_VEICULO, flagAtivo: true } })
       .then((tiposVeiculos) =>
         tiposVeiculos.map((e) => BuscarTiposVeiculosDTO.fromEntity(e)),
       );

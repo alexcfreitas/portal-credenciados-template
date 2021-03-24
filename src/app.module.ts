@@ -1,16 +1,22 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { configService } from './config/config.service';
 import { TiposVeiculosModule } from './tipos-veiculos/tipos-veiculos.module';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require('dotenv').config();
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
+    TypeOrmModule.forRoot({
+      type: 'oracle',
+      connectString: `${process.env.HOST}:${process.env.PORT}/${process.env.DATABASE}`,
+      username: process.env.USER,
+      password: process.env.PASSWORD,
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      synchronize: false,
+    }),
     TiposVeiculosModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
